@@ -13,6 +13,19 @@ Set-StrictMode -Version Latest
 # Continue on errors so a missing tool/cache does not halt the script
 $ErrorActionPreference = "Continue"
 
+function Get-FreeSpaceInfo {
+    try {
+        $drive = (Resolve-Path .).Path.Substring(0,1)
+        $psd = Get-PSDrive -Name $drive -ErrorAction Stop
+        return [pscustomobject]@{
+            Drive  = $psd.Name
+            FreeGB = [math]::Round($psd.Free / 1GB, 2)
+        }
+    } catch {
+        return [pscustomobject]@{ Drive = ""; FreeGB = $null }
+    }
+}
+
 function Write-Section {
     param([string]$Title)
     Write-Host ""
@@ -26,7 +39,12 @@ function Remove-Paths {
         [switch]$Recurse
     )
     Write-Host "-> $Label" -ForegroundColor Green
-    foreach ($p in $Paths | Where-Object { $_ -and (Test-Path $_) }) {
+    $matches = $Paths | Where-Object { $_ -and (Test-Path $_) }
+    if (-not $matches) {
+        Write-Host "   No matching paths found (skipped)." -ForegroundColor Yellow
+        return
+    }
+    foreach ($p in $matches) {
         try {
             Remove-Item -LiteralPath $p -Force -ErrorAction SilentlyContinue -Recurse:$Recurse
         } catch {
@@ -51,7 +69,7 @@ function Clean-AndroidGradle {
 }
 
 function Clean-Flutter {
-    Write-Section "Flutter projects + global cache"
+    Write-Section "Flutter project caches + global cache"
     $projects = Get-ChildItem -Path . -Recurse -Filter pubspec.yaml -ErrorAction SilentlyContinue
     foreach ($file in $projects) {
         $dir = $file.Directory.FullName
@@ -69,8 +87,14 @@ function Clean-Flutter {
         Remove-Paths -Label "Project cache" -Paths $projectPaths -Recurse
     }
     if (Get-Command flutter -ErrorAction SilentlyContinue) {
-        Write-Host "Running: flutter cache clean" -ForegroundColor Green
-        try { flutter cache clean | Out-Null } catch { Write-Host "flutter cache clean failed: $_" -ForegroundColor Yellow }
+        $hasCacheCmd = $false
+        try { flutter help cache *> $null; if ($LASTEXITCODE -eq 0) { $hasCacheCmd = $true } } catch { $hasCacheCmd = $false }
+        if ($hasCacheCmd) {
+            Write-Host "Running: flutter cache clean" -ForegroundColor Green
+            try { flutter cache clean | Out-Null } catch { Write-Host "flutter cache clean failed: $_" -ForegroundColor Yellow }
+        } else {
+            Write-Host "flutter cache clean not available in this Flutter version; skipping CLI clean." -ForegroundColor Yellow
+        }
     }
     $globalPaths = @(
         "$env:LOCALAPPDATA\Pub\Cache",
@@ -238,6 +262,7 @@ function Show-Menu {
 while ($true) {
     Show-Menu
     $choice = Read-Host "Enter choice"
+    $before = Get-FreeSpaceInfo
     switch ($choice) {
         "0" { break }
         "1" { Clean-All }
@@ -253,6 +278,11 @@ while ($true) {
         "11" { Clean-Docker }
         "12" { Clean-System }
         Default { Write-Host "Invalid choice, try again." -ForegroundColor Red }
+    }
+    $after = Get-FreeSpaceInfo
+    if ($before.FreeGB -ne $null -and $after.FreeGB -ne $null) {
+        $delta = [math]::Round($after.FreeGB - $before.FreeGB, 2)
+        Write-Host ("Space before: {0} GB | after: {1} GB | delta: {2} GB" -f $before.FreeGB, $after.FreeGB, $delta) -ForegroundColor Cyan
     }
 }
 
