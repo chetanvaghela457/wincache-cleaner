@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="WinCache Cleaner - PowerShell utility to clear Windows dev and creative caches.">
+  <meta name="author" content="WinCache Cleaner">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="WinCache Cleaner - Windows Dev Cache Utility">
+  <meta property="og:url" content="https://chetanvaghela457.github.io/wincache-cleaner/">
+  <meta property="og:image" content="https://chetanvaghela457.github.io/wincache-cleaner/images/poster_1.0.0.png">
+  <meta property="og:description" content="One-click PowerShell menu to remove dev and creative caches on Windows.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="WinCache Cleaner - Windows Dev Cache Utility">
+  <meta name="twitter:url" content="https://chetanvaghela457.github.io/wincache-cleaner/">
+  <meta name="twitter:image" content="https://chetanvaghela457.github.io/wincache-cleaner/images/poster_1.0.0.png">
+  <meta name="twitter:description" content="One-click PowerShell menu to remove dev and creative caches on Windows.">
+  <title>WinCache Cleaner</title>
+  <style>
+    :root {
+      --bg: #0b1224;
+      --panel: #0f182d;
+      --panel-2: #121c35;
+      --text: #e5ecff;
+      --muted: #9db2d7;
+      --accent: #6ee7ff;
+      --accent-2: #7c3aed;
+      --code-bg: #0b152e;
+      --chip: #192749;
+      --shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+      background: radial-gradient(circle at 10% 20%, rgba(124,58,237,0.25), transparent 25%),
+                  radial-gradient(circle at 90% 10%, rgba(110,231,255,0.25), transparent 25%),
+                  linear-gradient(135deg, #0a0f1f 0%, #0d1327 60%, #0a0f1f 100%);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 32px 16px 48px;
+    }
+    .shell {
+      max-width: 1100px;
+      margin: 0 auto;
+      background: linear-gradient(145deg, var(--panel), var(--panel-2));
+      border: 1px solid #1e2a45;
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    header {
+      padding: 28px 32px 12px;
+      display: flex;
+      gap: 18px;
+      align-items: center;
+    }
+    header img {
+      width: 88px;
+      height: 88px;
+      border-radius: 16px;
+      border: 1px solid #243453;
+      object-fit: cover;
+    }
+    header .title {
+      flex: 1;
+    }
+    header h1 {
+      font-size: 32px;
+      margin-bottom: 6px;
+      letter-spacing: 0.2px;
+    }
+    header p { color: var(--muted); line-height: 1.5; }
+    .links {
+      display: flex;
+      gap: 12px;
+      padding: 0 32px 18px;
+      flex-wrap: wrap;
+    }
+    .links a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+      background: #15203a;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid #223257;
+      transition: all 0.2s ease;
+    }
+    .links a:hover { background: #1c2a4a; }
+    main {
+      padding: 12px 32px 28px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+    .card {
+      background: #0d172c;
+      border: 1px solid #1c2945;
+      border-radius: 14px;
+      padding: 18px;
+    }
+    .card h3 { margin-bottom: 8px; }
+    .card p { color: var(--muted); margin-bottom: 12px; }
+    code.block {
+      display: block;
+      background: var(--code-bg);
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid #1c2c52;
+      color: #d8e7ff;
+      overflow-x: auto;
+      font-size: 14px;
+    }
+    ul { list-style: none; color: var(--muted); }
+    ul li { padding: 6px 0; display: flex; align-items: center; gap: 8px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); display: inline-block; }
+    .footer {
+      padding: 0 32px 24px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .footer a {
+      background: #2563eb;
+      color: #fff;
+      padding: 12px 16px;
+      text-decoration: none;
+      border-radius: 10px;
+      font-weight: 600;
+      border: 1px solid #2d6deb;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: 0 10px 25px rgba(37,99,235,0.35);
+    }
+    .footer a.secondary {
+      background: #1f2937;
+      border-color: #2c3a52;
+      box-shadow: none;
+    }
+    .footer a:hover { transform: translateY(-2px); }
+    @media (max-width: 720px) {
+      header { flex-direction: column; align-items: flex-start; }
+      header img { width: 72px; height: 72px; }
+      .shell { border-radius: 14px; }
+      main { padding: 12px 20px 24px; }
+      .links, .footer { padding: 0 20px 18px; }
+      body { padding: 20px 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <img src="./images/poster_1.0.0.png" alt="WinCache Cleaner poster">
+      <div class="title">
+        <h1>WinCache Cleaner</h1>
+        <p>PowerShell utility to clear Windows dev and creative caches (Android Studio/Gradle, Flutter, Node, Python, .NET/NuGet, IDEs, browsers, Adobe, Unity, Docker, temp).</p>
+      </div>
+    </header>
+
+    <div class="links">
+      <a href="https://github.com/chetanvaghela457/wincache-cleaner">GitHub</a>
+      <a href="https://github.com/chetanvaghela457/wincache-cleaner/stargazers">Stars</a>
+    </div>
+
+    <main>
+      <div class="card">
+        <h3>Quick run (one-liner)</h3>
+        <code class="block">iwr https://raw.githubusercontent.com/chetanvaghela457/wincache-cleaner/main/wincache-cleaner.ps1 -OutFile wincache-cleaner.ps1; powershell -ExecutionPolicy Bypass -File .\wincache-cleaner.ps1</code>
+      </div>
+
+      <div class="card">
+        <h3>From a clone</h3>
+        <code class="block">git clone https://github.com/chetanvaghela457/wincache-cleaner.git
+cd wincache-cleaner
+powershell -ExecutionPolicy Bypass -File .\wincache-cleaner.ps1</code>
+      </div>
+
+      <div class="card">
+        <h3>What it cleans</h3>
+        <ul>
+          <li><span class="dot"></span>Android Studio / Gradle</li>
+          <li><span class="dot"></span>Flutter projects + global cache</li>
+          <li><span class="dot"></span>Node (npm/yarn/pnpm)</li>
+          <li><span class="dot"></span>Python pip cache</li>
+          <li><span class="dot"></span>.NET / NuGet cache</li>
+          <li><span class="dot"></span>IDEs: Visual Studio, VS Code, JetBrains</li>
+          <li><span class="dot"></span>Browsers: Chrome, Edge, Brave, Firefox, Opera/Opera GX, Vivaldi</li>
+          <li><span class="dot"></span>Adobe: Premiere, After Effects, Photoshop, Media Encoder, Lightroom</li>
+          <li><span class="dot"></span>Unity / Unity Hub</li>
+          <li><span class="dot"></span>Docker Desktop logs/cache (optional prune)</li>
+          <li><span class="dot"></span>System temp and Recycle Bin</li>
+        </ul>
+      </div>
+    </main>
+
+    <div class="footer">
+      <a href="https://github.com/chetanvaghela457/wincache-cleaner" target="_blank">View on GitHub</a>
+      <a class="secondary" href="https://github.com/chetanvaghela457/wincache-cleaner/graphs/contributors" target="_blank">Contributors</a>
+    </div>
+  </div>
+</body>
+</html>

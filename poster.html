@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WinCache Cleaner - Poster</title>
+  <style>
+    :root {
+      --bg: #0b0f1c;
+      --panel: #101628;
+      --muted: #c5d3ff;
+      --green: #5eead4;
+      --accent: #7dd3fc;
+      --purple: #c084fc;
+      --line: #1f2941;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
+      background: radial-gradient(circle at 20% 20%, rgba(125,211,252,0.12), transparent 28%),
+                  radial-gradient(circle at 85% 30%, rgba(192,132,252,0.12), transparent 26%),
+                  var(--bg);
+      color: #e5ecff;
+      min-height: 100vh;
+      padding: 32px 18px 40px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+    .panel {
+      width: min(960px, 100%);
+      background: var(--panel);
+      border: 1px solid #1d2540;
+      border-radius: 14px;
+      padding: 26px 26px 28px;
+      box-shadow: 0 18px 60px rgba(0,0,0,0.35);
+    }
+    .title {
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 800;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-shadow:
+        2px 2px 0 #0b0f1c,
+        5px 5px 0 #0b0f1c,
+        8px 8px 0 rgba(109, 40, 217, 0.55);
+      margin-bottom: 18px;
+    }
+    .meta {
+      color: var(--muted);
+      margin-bottom: 12px;
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 8px;
+      background: var(--green);
+      box-shadow: 0 0 12px rgba(94,234,212,0.7);
+    }
+    hr {
+      border: none;
+      border-top: 1px solid var(--line);
+      margin: 14px 0 16px;
+    }
+    h3 {
+      color: var(--purple);
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+    ul { list-style: none; color: var(--muted); }
+    li {
+      padding: 6px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    li .bullet {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 10px rgba(125, 211, 252, 0.8);
+    }
+    .note {
+      color: var(--green);
+      margin-top: 14px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="panel">
+    <div class="title">WinCache Cleaner</div>
+    <div class="meta">
+      <span><span class="dot"></span>Version: v1.0.0</span>
+      <span><span class="dot"></span>Scope: Windows caches only</span>
+      <span><span class="dot"></span>Safe: skips missing tools</span>
+    </div>
+    <hr>
+    <h3>What gets cleaned</h3>
+    <ul>
+      <li><span class="bullet"></span>Android Studio / Gradle caches</li>
+      <li><span class="bullet"></span>Flutter projects (build/.dart_tool/.packages/pubspec.lock) + Pub/FVM cache</li>
+      <li><span class="bullet"></span>Node package managers (npm / yarn / pnpm)</li>
+      <li><span class="bullet"></span>Python pip cache</li>
+      <li><span class="bullet"></span>.NET / NuGet cache</li>
+      <li><span class="bullet"></span>IDEs: Visual Studio, VS Code, JetBrains</li>
+      <li><span class="bullet"></span>Browsers: Chrome, Edge, Brave, Firefox, Opera/Opera GX, Vivaldi</li>
+      <li><span class="bullet"></span>Adobe: Premiere, After Effects, Photoshop, Media Encoder, Lightroom</li>
+      <li><span class="bullet"></span>Unity / Unity Hub caches</li>
+      <li><span class="bullet"></span>Docker Desktop logs/cache (prune optional)</li>
+      <li><span class="bullet"></span>System temp and Recycle Bin</li>
+    </ul>
+    <div class="note">No source files or documents are touched.</div>
+  </div>
+</body>
+</html>

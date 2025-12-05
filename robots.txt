@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://chetanvaghela457.github.io/wincache-cleaner/sitemap.xml
